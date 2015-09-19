@@ -20,6 +20,8 @@ library
                      , HTF
                      , HUnit
                      , parsec
+                     , derive
+                     , QuickCheck
   default-language:    Haskell2010
 
 executable infix-string-calculator-exe
