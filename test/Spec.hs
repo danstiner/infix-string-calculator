@@ -2,6 +2,7 @@
 
 module Main where
 
+import {-@ HTF_TESTS @-} Lexer
 import {-@ HTF_TESTS @-} StringCalculator
 import Test.Framework
 
