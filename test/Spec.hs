@@ -1,2 +1,9 @@
+{-# OPTIONS_GHC -F -pgmF htfpp #-}
+
+module Main where
+
+import {-@ HTF_TESTS @-} StringCalculator
+import Test.Framework
+
 main :: IO ()
-main = putStrLn "Test suite not yet implemented"
+main = htfMain htf_importedTests

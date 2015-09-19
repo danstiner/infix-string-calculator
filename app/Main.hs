@@ -1,6 +1,6 @@
 module Main where
 
-import Lib
+import StringCalculator
 
 main :: IO ()
 main = someFunc
