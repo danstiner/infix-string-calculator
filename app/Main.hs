@@ -2,5 +2,24 @@ module Main where
 
 import StringCalculator
 
+import Control.Monad
+import System.Exit
+import System.IO
+
 main :: IO ()
-main = someFunc
+main = do
+	putStrLn "Enter expression using whole numbers with / * + - ( ) or negation"
+	repl
+
+repl :: IO ()
+repl = do
+	input <- prompt "> "
+	when (input == "exit") exitSuccess
+	putStrLn (show (calculate input))
+	repl
+
+prompt :: String -> IO String
+prompt text = do
+    putStr text
+    hFlush stdout
+    getLine
