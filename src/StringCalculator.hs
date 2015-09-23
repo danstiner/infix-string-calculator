@@ -5,7 +5,7 @@ module StringCalculator
 
 import qualified StringCalculator.AST as AST
 
-implementations :: [(String, (String -> Either String Rational))]
+implementations :: [(String, String -> Either String Rational)]
 implementations = [("AST", AST.calculate)]
 
 calculate = AST.calculate

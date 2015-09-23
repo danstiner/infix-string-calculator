@@ -1,12 +1,10 @@
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 {-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE TemplateHaskell  #-}
 
 module StringCalculator
     ( someFunc
     , htf_thisModulesTests
     ) where
-
 
 import           Lexer
 import           Types

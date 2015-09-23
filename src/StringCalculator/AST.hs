@@ -1,6 +1,5 @@
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 {-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE TemplateHaskell  #-}
 
 module StringCalculator.AST
     ( calculate
@@ -26,21 +25,21 @@ instance Alternative Parser where
 
 parserPlus :: Parser a -> Parser a -> Parser a
 parserPlus (Parser a) (Parser b) = Parser $ \input ->
-	(a input) `parseResultPlus` (b input)
+	a input `parseResultPlus` b input
 
 parseResultPlus :: ParseResult a -> ParseResult a -> ParseResult a
 parseResultPlus result@(Right _) _      = result
 parseResultPlus _                result = result
 
 instance Applicative Parser where
-	pure a = Parser $ \input -> (Right (input, a))
+	pure a = Parser $ \input -> Right (input, a)
 	a <*> b = parserAp a b
 
 parserAp :: Parser (a -> b) -> Parser a -> Parser b
-parserAp (Parser pf) pa = Parser $ \input -> (pf input) `parseResultAp` pa
+parserAp (Parser pf) pa = Parser $ \input -> pf input `parseResultAp` pa
 	where
 		parseResultAp :: ParseResult (a -> b) -> Parser a -> ParseResult b
-		parseResultAp (Right (cont, f)) (Parser p) = case (p cont) of
+		parseResultAp (Right (cont, f)) (Parser p) = case p cont of
 			Right (cont', a) -> Right (cont', f a)
 			Left error -> Left error
 		parseResultAp (Left error) _ = Left error

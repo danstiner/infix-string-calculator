@@ -27,7 +27,7 @@ integer :: Stream s m Char => ParsecT s u m (Positive Integer)
 integer = Positive <$> read <$> lexeme (many1 digit)
 
 lexString :: String -> Either ParseError [Token]
-lexString = parse (lexer) "string"
+lexString = parse lexer "string"
 
 lexer :: Stream s m Char => ParsecT s u m [Token]
 lexer = many1 tokenP

@@ -15,7 +15,7 @@ repl :: IO ()
 repl = do
 	input <- prompt "> "
 	when (input == "exit") exitSuccess
-	putStrLn (show (calculate input))
+	print (calculate input)
 	repl
 
 prompt :: String -> IO String
