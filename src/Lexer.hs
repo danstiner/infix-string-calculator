@@ -1,6 +1,7 @@
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 
 module Lexer
     ( lexString
