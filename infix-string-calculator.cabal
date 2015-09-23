@@ -16,7 +16,9 @@ cabal-version:       >=1.10
 library
   hs-source-dirs:      src
   exposed-modules:     StringCalculator
+                     , StringCalculator.AST
                      , Lexer
+                     , Types
   build-depends:       base >= 4.7 && < 5
                      , HTF
                      , HUnit
