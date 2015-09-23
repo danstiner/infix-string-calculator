@@ -2,9 +2,9 @@
 
 module Main where
 
-import {-@ HTF_TESTS @-} Lexer
-import {-@ HTF_TESTS @-} StringCalculator.AST
-import Test.Framework
+import           Lexer
+import           StringCalculator.AST
+import           Test.Framework
 
 main :: IO ()
 main = htfMain htf_importedTests

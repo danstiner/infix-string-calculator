@@ -3,7 +3,7 @@ module Types
 	, Calculation
 	) where
 
-import Test.QuickCheck.Modifiers
+import           Test.QuickCheck.Modifiers
 
 type Calculation = Either String Integer
 

@@ -1,10 +1,10 @@
 module Main where
 
-import StringCalculator
+import           StringCalculator
 
-import Control.Monad
-import System.Exit
-import System.IO
+import           Control.Monad
+import           System.Exit
+import           System.IO
 
 main :: IO ()
 main = do

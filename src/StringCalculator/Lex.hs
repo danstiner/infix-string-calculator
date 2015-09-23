@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 {-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TemplateHaskell  #-}
 
 module StringCalculator
     ( someFunc
@@ -8,16 +8,16 @@ module StringCalculator
     ) where
 
 
-import Lexer
-import Types
+import           Lexer
+import           Types
 
-import Control.Applicative ((<$>))
-import Text.Parsec
-import Data.DeriveTH
+import           Control.Applicative       ((<$>))
+import           Data.DeriveTH
+import           Text.Parsec
 
-import Test.Framework
-import Test.HUnit
-import Test.QuickCheck.Modifiers
+import           Test.Framework
+import           Test.HUnit
+import           Test.QuickCheck.Modifiers
 
 data Calculation = Invalid String | Valid Integer deriving (Eq, Show)
 
