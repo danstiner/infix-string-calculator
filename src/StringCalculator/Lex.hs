@@ -1,9 +1,7 @@
-{-# OPTIONS_GHC -F -pgmF htfpp #-}
 {-# LANGUAGE FlexibleContexts #-}
 
 module StringCalculator
     ( someFunc
-    , htf_thisModulesTests
     ) where
 
 import           Lexer
