@@ -1,9 +1,7 @@
-{-# OPTIONS_GHC -F -pgmF htfpp #-}
 {-# LANGUAGE FlexibleContexts #-}
 
 module StringCalculator.AST
     ( calculate
-    , htf_thisModulesTests
     ) where
 
 import           Types
@@ -11,8 +9,6 @@ import           Types
 import           Control.Applicative
 import           Data.Char
 
-import           Test.Framework
-import           Test.HUnit
 import           Test.QuickCheck.Modifiers
 
 type ParseResult a = Either String (String, a)

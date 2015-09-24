@@ -1,10 +1,10 @@
-{-# OPTIONS_GHC -F -pgmF htfpp #-}
-
 module Main where
 
-import {-@ HTF_TESTS @-} Lexer
-import {-@ HTF_TESTS @-} StringCalculator.AST
-import                   Test.Framework
+import qualified Lexer
+import qualified StringCalculator.AST
+import           Test.Framework       (defaultMain)
 
 main :: IO ()
-main = htfMain htf_importedTests
+main = defaultMain
+	[ Lexer.tests
+	]

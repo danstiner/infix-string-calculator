@@ -1,20 +1,22 @@
-{-# OPTIONS_GHC -F -pgmF htfpp #-}
 {-# LANGUAGE FlexibleContexts      #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE TemplateHaskell       #-}
 
 module Lexer
     ( lexString
-    , htf_thisModulesTests
+    , tests
     , Token (..)
     ) where
 
-import           Control.Applicative       ((<$>))
+import           Control.Applicative                  ((<$>))
 import           Data.DeriveTH
 import           Text.Parsec
 
-import           Test.Framework
+import           Test.Framework                       (testGroup)
+import           Test.Framework.Providers.QuickCheck2 (testProperty)
+import           Test.Framework.TH
 import           Test.HUnit
+import           Test.QuickCheck
 import           Test.QuickCheck.Modifiers
 
 data Calculation = Invalid String | Valid Integer deriving (Eq, Show)
@@ -64,3 +66,5 @@ printToken (LeftParen : ts) = "(" ++ printToken ts
 printToken (RightParen : ts) = ")" ++ printToken ts
 printToken (Divide : ts) = "/" ++ printToken ts
 printToken (Times : ts) = "*" ++ printToken ts
+
+tests = $(testGroupGenerator)
