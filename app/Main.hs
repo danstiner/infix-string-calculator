@@ -8,15 +8,15 @@ import           System.IO
 
 main :: IO ()
 main = do
-	putStrLn "Enter expression using whole numbers with / * + - ( ) or negation"
-	repl
+    putStrLn "Enter expression using whole numbers with / * + - ( ) or negation"
+    repl
 
 repl :: IO ()
 repl = do
-	input <- prompt "> "
-	when (input == "exit") exitSuccess
-	print (calculate input)
-	repl
+    input <- prompt "> "
+    when (input == "exit") exitSuccess
+    print (calculate input)
+    repl
 
 prompt :: String -> IO String
 prompt text = do
