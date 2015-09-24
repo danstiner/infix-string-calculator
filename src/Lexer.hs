@@ -14,6 +14,7 @@ import           Text.Parsec
 
 import           Test.Framework                       (testGroup)
 import           Test.Framework.Providers.QuickCheck2 (testProperty)
+import           Test.Framework.TH
 import           Test.HUnit
 import           Test.QuickCheck
 import           Test.QuickCheck.Modifiers
@@ -66,6 +67,4 @@ printToken (RightParen : ts) = ")" ++ printToken ts
 printToken (Divide : ts) = "/" ++ printToken ts
 printToken (Times : ts) = "*" ++ printToken ts
 
-tests = testGroup "Lexer" [
-    testProperty "tokenize" prop_tokenize
-    ]
+tests = $(testGroupGenerator)
