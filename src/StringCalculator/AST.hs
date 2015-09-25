@@ -4,8 +4,8 @@ module StringCalculator.AST
     ( calculate
     ) where
 
+import           Parser                    (Parser, char, whole)
 import qualified Parser
-import Parser (Parser, char, whole)
 import           Types
 
 import           Control.Applicative
