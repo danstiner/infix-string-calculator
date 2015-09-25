@@ -68,21 +68,18 @@ run (Parser f) input = case f input of
     Left error -> Left error
 
 whole :: Parser (Positive Integer)
-whole = fmap (Positive . digitsToInteger) (some digit)
-  where
-    digitsToInteger = sum . zipWith (*) powersOfTen . reverse . map toInteger
-    powersOfTen = map (10^) [0..]
+whole = Positive <$> read <$> some digit
 
 prop_whole :: Positive Integer -> Bool
 prop_whole (Positive i) = Right (Positive i) == run whole (show i)
 
-digit :: Parser Int
+digit :: Parser Char
 digit = Parser digit'
   where
-    digit' :: String -> ParseResult Int
+    digit' :: String -> ParseResult Char
     digit' [] = Left "End of input"
     digit' (c:cs)
-        | isDigit c = Right (cs, digitToInt c)
+        | isDigit c = Right (cs, c)
         | otherwise = Left (show c ++ " is not a digit")
 
 char :: Char -> Parser Char
