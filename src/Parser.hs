@@ -74,6 +74,9 @@ whole = fmap (Positive . digitsToInteger) (some digit)
     digitsToInteger = sum . zipWith (*) powersOfTen . reverse . map toInteger
     powersOfTen = map (10^) [0..]
 
+prop_whole :: Positive Integer -> Bool
+prop_whole (Positive i) = Right (Positive i) == run whole (show i)
+
 digit :: Parser Int
 digit = Parser digit'
   where
