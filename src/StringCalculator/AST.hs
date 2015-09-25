@@ -1,5 +1,3 @@
-{-# LANGUAGE FlexibleContexts #-}
-
 module StringCalculator.AST
     ( calculate
     ) where
