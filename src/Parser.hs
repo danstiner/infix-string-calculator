@@ -1,4 +1,5 @@
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE TemplateHaskell  #-}
 
 module Parser
     ( run
@@ -7,14 +8,19 @@ module Parser
     , whole
     , digit
     , char
+    , tests
     ) where
 
 import           Types
 
 import           Control.Applicative
 import           Data.Char
+import           Data.Either
 
-import           Test.QuickCheck.Modifiers
+import           Test.Framework
+import           Test.Framework.Providers.QuickCheck2 (testProperty)
+import           Test.Framework.TH
+import           Test.QuickCheck
 
 type ParseError = String
 
@@ -85,3 +91,11 @@ char c = Parser char'
         char' (c':cs')
             | c == c' = Right (cs', c)
             | otherwise = Left (show c' ++ " is not expected " ++ show c)
+
+prop_char_matching :: Char -> Bool
+prop_char_matching c = Right c == run (char c) [c]
+
+prop_char_nonmatching :: Char -> Char -> Bool
+prop_char_nonmatching c c' = c == c' || isLeft (run (char c') [c])
+
+tests = $(testGroupGenerator)
