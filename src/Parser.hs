@@ -62,10 +62,15 @@ instance Functor Parser where
 
 run :: Parser a -> String -> Either String a
 run (Parser f) input = case f input of
-    Right (cont, a)
-        | cont == "" -> Right a
-        | otherwise -> Left ("Remaining input: " ++ cont)
+    Right (cont, a) -> Right a
     Left error -> Left error
+
+eof :: Parser ()
+eof = Parser eof'
+  where
+    eof' :: String -> ParseResult ()
+    eof' [] = Right ([], ())
+    eof' cs  = Left ("Expected end-of-input, remaining: " ++ cs)
 
 whole :: Parser (Positive Integer)
 whole = Positive <$> read <$> some digit
@@ -89,7 +94,7 @@ char c = Parser char'
         char' [] = Left "End of input"
         char' (c':cs')
             | c == c' = Right (cs', c)
-            | otherwise = Left (show c' ++ " is not expected " ++ show c)
+            | otherwise = Left (show c' ++ " is unexpected, wanted " ++ show c)
 
 prop_char_matching :: Char -> Bool
 prop_char_matching c = Right c == run (char c) [c]

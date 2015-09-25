@@ -2,7 +2,7 @@ module StringCalculator.AST
     ( calculate
     ) where
 
-import           Parser                    (Parser, char, whole)
+import           Parser                    (Parser, char, whole, eof)
 import qualified Parser
 import           Types
 
@@ -30,11 +30,12 @@ instance Show AST where
     show (Negate ast) = "(-" ++ show ast ++ ")"
 
 calculate :: String -> Calculation
-calculate input = Right . eval =<< Parser.run ast input
+calculate input = Right . eval =<< Parser.run parser input
 
-ast :: Parser AST
-ast = addsub <|> multdiv <|> unambiguous
+parser :: Parser AST
+parser = ast <* eof
     where
+        ast = addsub <|> multdiv <|> unambiguous
         multdiv = multiply <|> divide
         addsub = add <|> subtract
         unambiguous = parenthesized <|> literal <|> negation
