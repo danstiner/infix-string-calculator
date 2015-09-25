@@ -17,21 +17,21 @@ calculate :: String -> Either String Rational
 calculate input = Right . eval =<< Parser.run ast input
 
 ast :: Parser AST
-ast = pri2 <|> pri1 <|> pri3
+ast = addsub <|> multdiv <|> unambiguous
     where
-        pri1 = multiply <|> divide
-        pri2 = add <|> subtract
-        pri3 = parenthesized <|> literal <|> negation
+        multdiv = multiply <|> divide
+        addsub = add <|> subtract
+        unambiguous = parenthesized <|> literal <|> negation
         parenthesized = char '(' *> ast <* char ')'
         multiply = Multiply <$> multdivleft <* char '*' <*> multdivright
         divide   = Divide   <$> multdivleft <* char '/' <*> multdivright
-        multdivleft = pri3
-        multdivright = pri1 <|> pri3
+        multdivleft = unambiguous
+        multdivright = multdiv <|> unambiguous
         add      = Add      <$> addsubleft <* char '+' <*> ast
         subtract = Subtract <$> addsubleft <* char '-' <*> ast
-        addsubleft = pri1 <|> pri3
+        addsubleft = multdiv <|> unambiguous
         literal = LiteralInteger <$> whole
-        negation = Negate <$> (char '-' *> pri3)
+        negation = Negate <$> (char '-' *> unambiguous)
 
 eval :: AST -> Rational
 eval (LiteralInteger (Positive i)) = fromIntegral i
