@@ -1,12 +1,14 @@
 {-# LANGUAGE TemplateHaskell  #-}
 
 module Parser
-    ( run
+    ( parse
     , Parser
     , ParseResult
+    , ParseError
     , whole
     , digit
     , char
+    , eof
     , tests
     ) where
 
@@ -60,8 +62,8 @@ instance Functor Parser where
                 Right (cont, a) -> Right (cont, f a)
                 Left error -> Left error
 
-run :: Parser a -> String -> Either String a
-run (Parser f) input = case f input of
+parse :: Parser a -> String -> Either String a
+parse (Parser f) input = case f input of
     Right (cont, a) -> Right a
     Left error -> Left error
 
@@ -76,7 +78,7 @@ whole :: Parser (Positive Integer)
 whole = Positive <$> read <$> some digit
 
 prop_whole :: Positive Integer -> Bool
-prop_whole (Positive i) = Right (Positive i) == run whole (show i)
+prop_whole (Positive i) = Right (Positive i) == parse whole (show i)
 
 digit :: Parser Char
 digit = Parser digit'
@@ -97,9 +99,9 @@ char c = Parser char'
             | otherwise = Left (show c' ++ " is unexpected, wanted " ++ show c)
 
 prop_char_matching :: Char -> Bool
-prop_char_matching c = Right c == run (char c) [c]
+prop_char_matching c = Right c == parse (char c) [c]
 
 prop_char_nonmatching :: Char -> Char -> Bool
-prop_char_nonmatching c c' = c == c' || isLeft (run (char c') [c])
+prop_char_nonmatching c c' = c == c' || isLeft (parse (char c') [c])
 
 tests = $(testGroupGenerator)
