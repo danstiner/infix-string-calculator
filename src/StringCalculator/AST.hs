@@ -2,15 +2,15 @@ module StringCalculator.AST
     ( calculate
     ) where
 
-import           Parser                    (Parser, char, whole, eof)
+import           Parser                    (Parser, parse, char, whole, eof)
 import qualified Parser
 import           Types
 
 import           Control.Applicative
+import           Control.Monad
 import           Data.Char
-
+import           Data.Either.Combinators
 import           Test.QuickCheck.Modifiers
-
 
 data AST =
     LiteralInteger (Positive Integer)
@@ -30,7 +30,7 @@ instance Show AST where
     show (Negate ast) = "(-" ++ show ast ++ ")"
 
 calculate :: String -> Calculation
-calculate input = Right . eval =<< Parser.run parser input
+calculate = fmap eval . parse parser
 
 parser :: Parser AST
 parser = ast <* eof
