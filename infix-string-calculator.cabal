@@ -18,6 +18,7 @@ library
   hs-source-dirs:      src
   exposed-modules:     StringCalculator
                      , StringCalculator.AST
+                     , StringCalculator.Postfix
                      , Lexer
                      , Types
                      , Parser
@@ -25,6 +26,7 @@ library
                      , HUnit
                      , parsec
                      , derive
+                     , either
                      , test-framework
                      , test-framework-th
                      , test-framework-quickcheck2
