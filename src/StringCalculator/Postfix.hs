@@ -41,25 +41,26 @@ calculate :: String -> Calculation
 calculate = eval <=< toPostfix <=< lexString
 
 lexString :: String -> Either ParseError [Token]
-lexString = parse lexer
+lexString = parse (lexer <* eof)
 
 lexer :: Parser [Token]
 lexer = (++) <$> many negation <*> (concat <$> some token)
 
 token :: Parser [Token]
-token = wholeTok' <|> opThenNegation <|> operator'
+token = wholeTok' <|> opThenNegation <|> operator' <|> rightParen'
     where
         wholeTok' = (:[]) <$> wholeTok
         operator' = (:[]) <$> operator
+        rightParen' = (:[]) <$> rightParen
 
 opThenNegation :: Parser [Token]
-opThenNegation = (:) <$> operator <*> many negation
+opThenNegation = (:) <$> (operator <|> leftParen) <*> many negation
 
 negation :: Parser Token
 negation = char '-' *> pure NegateTok
 
 operator :: Parser Token
-operator = minus <|> plus <|> leftParen <|> rightParen <|> divide <|> times
+operator = minus <|> plus <|> divide <|> times
 
 wholeTok, minus, plus, leftParen, rightParen, divide, times :: Parser Token
 wholeTok = IntegerToken <$> whole
