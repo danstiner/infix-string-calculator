@@ -19,7 +19,6 @@ library
   exposed-modules:     StringCalculator
                      , StringCalculator.AST
                      , StringCalculator.Postfix
-                     , Lexer
                      , Types
                      , Parser
   other-modules:       Test.Fluent
