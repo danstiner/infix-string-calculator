@@ -72,12 +72,21 @@ divide = char '/' *> pure DivideTok
 times = char '*' *> pure Times
 
 toPostfix :: [Token] -> Either String Postfix
-toPostfix [IntegerToken (Positive i)] = Right (Postfix [IntegerToken (Positive i)])
-toPostfix ts = Left ("Unexpected input: " ++ show ts)
+toPostfix tokens = toPostfix' tokens [] []
+  where
+    toPostfix' :: [Token] -> [Token] -> [Token] -> Either String Postfix
+    toPostfix' (IntegerToken (Positive i) : tokens) opstack partial = toPostfix' tokens opstack (IntegerToken (Positive i) : partial)
+    toPostfix' (NegateTok : tokens) opstack partial = toPostfix' tokens (NegateTok:opstack) partial
+    toPostfix' [] [] partial = Right (Postfix partial)
+    toPostfix' [] (NegateTok : opstack) partial = toPostfix' [] opstack (NegateTok : partial)
+    toPostfix' tokens opstack partial = Left ("Unexpected infix")
 
 eval :: Postfix -> Calculation
-eval (Postfix [IntegerToken (Positive i)]) = Right (fromIntegral i)
-eval (Postfix ts) = Left ("Unexpected: " ++ show ts)
+eval (Postfix tokens) = eval' tokens
+  where
+    eval' [IntegerToken (Positive i)] = Right (fromIntegral i)
+    eval' (NegateTok : tokens) = ((-1) *) <$> eval' tokens
+    eval' ts = Left ("Unexpected: " ++ show ts)
 
 prop_tokenize_an_integer :: Positive Integer -> Property.Result
 prop_tokenize_an_integer (Positive i) = Right [IntegerToken (Positive i)] `shouldBe` lexString (show i)
@@ -94,6 +103,12 @@ prop_tokenize_ast ast =
     lexString (tokensToString tokens) `shouldBe` Right tokens
     where
         tokens = astToTokens ast
+
+prop_calculate_a_whole :: Positive Integer -> Property.Result
+prop_calculate_a_whole (Positive i) = calculate (show i) `shouldBe` Right (fromIntegral i)
+
+prop_calculate_a_negated_whole :: Positive Integer -> Property.Result
+prop_calculate_a_negated_whole (Positive i) = calculate ("-" ++ show i) `shouldBe` Right (-1 * fromIntegral i)
 
 astToTokens :: AST -> [Token]
 astToTokens (LiteralInteger p) = [IntegerToken p]
