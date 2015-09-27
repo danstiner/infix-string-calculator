@@ -2,7 +2,7 @@ module StringCalculator.AST
     ( calculate
     ) where
 
-import           Parser                    (Parser, parse, char, whole, eof)
+import           Parser                    (Parser, char, eof, parse, whole)
 import qualified Parser
 import           Types
 
@@ -11,23 +11,6 @@ import           Control.Monad
 import           Data.Char
 import           Data.Either.Combinators
 import           Test.QuickCheck.Modifiers
-
-data AST =
-    LiteralInteger (Positive Integer)
-    | Subtract AST AST
-    | Add AST AST
-    | Divide AST AST
-    | Multiply AST AST
-    | Negate AST
-    deriving (Eq)
-
-instance Show AST where
-    show (LiteralInteger (Positive i)) = show i
-    show (Subtract a b) = "(" ++ show a ++ "-" ++ show b ++ ")"
-    show (Add a b) = "(" ++ show a ++ "+" ++ show b ++ ")"
-    show (Divide a b) = "(" ++ show a ++ "/" ++ show b ++ ")"
-    show (Multiply a b) = "(" ++ show a ++ "*" ++ show b ++ ")"
-    show (Negate ast) = "(-" ++ show ast ++ ")"
 
 calculate :: String -> Calculation
 calculate = fmap eval . parse parser

@@ -27,6 +27,7 @@ library
                      , parsec
                      , derive
                      , either
+                     , containers
                      , test-framework
                      , test-framework-th
                      , test-framework-quickcheck2
