@@ -9,7 +9,7 @@ import           Test.QuickCheck.Modifiers
 type Calculation = Either String Rational
 
 data AST =
-    LiteralInteger (Positive Integer)
+    WholeLiteral (Positive Integer)
     | Subtract AST AST
     | Add AST AST
     | Divide AST AST
@@ -18,7 +18,7 @@ data AST =
     deriving (Eq)
 
 instance Show AST where
-    show (LiteralInteger (Positive i)) = show i
+    show (WholeLiteral i) = show i
     show (Subtract a b) = "(" ++ show a ++ "-" ++ show b ++ ")"
     show (Add a b) = "(" ++ show a ++ "+" ++ show b ++ ")"
     show (Divide a b) = "(" ++ show a ++ "/" ++ show b ++ ")"
@@ -28,7 +28,7 @@ instance Show AST where
 instance Arbitrary AST where
     arbitrary = oneof [integer, operator]
       where
-        integer = LiteralInteger <$> arbitrary
+        integer = WholeLiteral <$> arbitrary
         operator = oneof
             [ Subtract <$> arbitrary <*> arbitrary
             , Add <$> arbitrary <*> arbitrary

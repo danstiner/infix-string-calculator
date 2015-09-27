@@ -30,11 +30,11 @@ parser = ast <* eof
         add      = Add      <$> addsubleft <* char '+' <*> ast
         subtract = Subtract <$> addsubleft <* char '-' <*> ast
         addsubleft = multdiv <|> unambiguous
-        literal = LiteralInteger <$> whole
+        literal = WholeLiteral <$> whole
         negation = Negate <$> (char '-' *> unambiguous)
 
 eval :: AST -> Rational
-eval (LiteralInteger (Positive i)) = fromIntegral i
+eval (WholeLiteral (Positive i)) = fromIntegral i
 eval (Subtract left right)         = eval left - eval right
 eval (Add left right)              = eval left + eval right
 eval (Divide dividend divisor)     = eval dividend / eval divisor
