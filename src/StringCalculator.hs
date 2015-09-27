@@ -4,12 +4,12 @@ module StringCalculator
     ) where
 
 import qualified StringCalculator.AST     as AST
-import qualified StringCalculator.Postfix as Postfix
+import qualified StringCalculator.Prefix as Prefix
 
 implementations :: [(String, String -> Either String Rational)]
 implementations =
     [ ("AST", AST.calculate)
-    , ("Postfix", Postfix.calculate)
+    , ("Prefix", Prefix.calculate)
     ]
 
-calculate = Postfix.calculate
+calculate = Prefix.calculate

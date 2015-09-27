@@ -18,7 +18,7 @@ library
   hs-source-dirs:      src
   exposed-modules:     StringCalculator
                      , StringCalculator.AST
-                     , StringCalculator.Postfix
+                     , StringCalculator.Prefix
                      , Types
                      , Parser
   other-modules:       Test.Fluent

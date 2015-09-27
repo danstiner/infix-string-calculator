@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 
-module StringCalculator.Postfix
+module StringCalculator.Prefix
     ( calculate
     , tests
     ) where
@@ -33,12 +33,12 @@ instance Show Token where
     show Asterick = "*"
     show NegateTok = "-"
 
-newtype Postfix = Postfix [Token]
+newtype Prefix = Prefix [Token]
 
 $(derive makeArbitrary ''Token)
 
 calculate :: String -> Calculation
-calculate = eval <=< toPostfix <=< lexString
+calculate = eval <=< toPrefix <=< lexString
 
 lexString :: String -> Either ParseError [Token]
 lexString = parse (lexer <* eof)
@@ -71,18 +71,18 @@ rightParen = char ')' *> pure RightParen
 divide = char '/' *> pure Slash
 times = char '*' *> pure Asterick
 
-toPostfix :: [Token] -> Either String Postfix
-toPostfix tokens = toPostfix' tokens [] []
+toPrefix :: [Token] -> Either String Prefix
+toPrefix tokens = toPrefix' tokens [] []
   where
-    toPostfix' :: [Token] -> [Token] -> [Token] -> Either String Postfix
-    toPostfix' (WholeToken (Positive i) : tokens) opstack partial = toPostfix' tokens opstack (WholeToken (Positive i) : partial)
-    toPostfix' (NegateTok : tokens) opstack partial = toPostfix' tokens (NegateTok:opstack) partial
-    toPostfix' [] [] partial = Right (Postfix partial)
-    toPostfix' [] (NegateTok : opstack) partial = toPostfix' [] opstack (NegateTok : partial)
-    toPostfix' tokens opstack partial = Left ("Unexpected infix")
+    toPrefix' :: [Token] -> [Token] -> [Token] -> Either String Prefix
+    toPrefix' (WholeToken (Positive i) : tokens) opstack partial = toPrefix' tokens opstack (WholeToken (Positive i) : partial)
+    toPrefix' (NegateTok : tokens) opstack partial = toPrefix' tokens (NegateTok:opstack) partial
+    toPrefix' [] [] partial = Right (Prefix partial)
+    toPrefix' [] (NegateTok : opstack) partial = toPrefix' [] opstack (NegateTok : partial)
+    toPrefix' tokens opstack partial = Left ("Unexpected infix")
 
-eval :: Postfix -> Calculation
-eval (Postfix tokens) = eval' tokens
+eval :: Prefix -> Calculation
+eval (Prefix tokens) = eval' tokens
   where
     eval' [WholeToken (Positive i)] = Right (fromIntegral i)
     eval' (NegateTok : tokens) = ((-1) *) <$> eval' tokens
