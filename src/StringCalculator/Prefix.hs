@@ -77,9 +77,10 @@ toPrefix tokens = toPrefix' tokens [] []
     toPrefix' :: [Token] -> [Token] -> [Token] -> Either String Prefix
     toPrefix' (WholeToken (Positive i) : tokens) opstack partial = toPrefix' tokens opstack (WholeToken (Positive i) : partial)
     toPrefix' (NegateTok : tokens) opstack partial = toPrefix' tokens (NegateTok:opstack) partial
+    toPrefix' (Plus : tokens) opstack partial = toPrefix' tokens (Plus:opstack) partial
     toPrefix' [] [] partial = Right (Prefix partial)
     toPrefix' [] (NegateTok : opstack) partial = toPrefix' [] opstack (NegateTok : partial)
-    toPrefix' tokens opstack partial = Left ("Unexpected infix")
+    toPrefix' tokens opstack partial = Left ("Unexpected infix, tokens: " ++ show tokens ++ " opstack: " ++ show opstack ++ " partial: " ++ show partial)
 
 eval :: Prefix -> Calculation
 eval (Prefix tokens) = eval' tokens
